@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getTimeAgo } from "../utils/time";
 import { posts, type Post } from "../mocks/posts";
+import { supabase } from "../utils/client";
 
 function HeartIcon() {
   return (
@@ -103,6 +104,27 @@ function Modal({
 export default function RankPage() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data, error } = await supabase
+      .from("post_new")
+      .select("id, image_url, caption, likes")
+      .gt("likes", 5)
+      .order("likes", { ascending: false });
+      
+      if (error) {
+        console.log('Error al obtener los posts:', error);
+      } else {
+        console.log('Posts obtenidos:', data);
+        setPosts(data);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
