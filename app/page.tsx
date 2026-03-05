@@ -128,19 +128,21 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await supabase
-        .from("posts_new")
-        .select("*")
-        .order("created_at", { ascending: false });
-
+      .from("post_new")
+      .select("*")      
+      .order("created_at", { ascending: false });
+      
       if (error) {
-        console.error("Error al obtener los posts:", error);
+        console.log('Error al obtener los posts:', error);
       } else {
+        console.log('Posts ordenados por fecha de creación:', data);
         setPosts(data);
       }
     };
 
     fetchPosts();
   }, []);
+
 
   return (
     <div className="min-h-screen bg-background">
