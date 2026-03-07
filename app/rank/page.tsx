@@ -110,7 +110,7 @@ export default function RankPage() {
     const fetchPosts = async () => {
       const { data, error } = await supabase
       .from("post_new")
-      .select("id, image_url, caption, likes")
+      .select("id, image_url, caption, likes, user_id, created_at")
       .gt("likes", 5)
       .order("likes", { ascending: false });
       
